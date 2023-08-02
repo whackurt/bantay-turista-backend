@@ -31,6 +31,12 @@ Route::controller(AuthController::class)->prefix('auth')->group(function () {
     Route::post('/refresh', 'refresh');
 });
 
+
+/* 
+    These routes are for testing only. 
+    Don't take it seriously. 
+*/
+
 Route::get('/users', function () {
     $users = User::all();
     return $users;
@@ -58,3 +64,7 @@ Route::get('/generateUsers/{count}', function ($count) {
 Route::get('/generateTourists/{count}', function ($count) {
     Tourist::factory()->count($count)->create();
 });
+
+/* 
+    END TESTING ROUTES 
+*/
