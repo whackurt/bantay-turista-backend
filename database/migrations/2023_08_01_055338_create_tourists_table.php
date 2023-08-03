@@ -15,6 +15,7 @@ return new class extends Migration {
             $table->string('qr_code')->unique();
             $table->string('first_name');
             $table->string('last_name');
+            $table->date('date_of_birth');
             $table->string('address');
             $table->string('gender');
             $table->string('nationality');

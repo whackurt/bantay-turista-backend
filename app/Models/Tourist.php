@@ -19,6 +19,7 @@ class Tourist extends Model
         'qr_code',
         'first_name',
         'last_name',
+        'date_of_birth',
         'address',
         'gender',
         'nationality',
