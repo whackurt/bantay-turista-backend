@@ -18,21 +18,6 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-        // tourist
-        if ($request->user_type == 1) {
-
-        }
-
-        // establishment
-        if ($request->user_type == 2) {
-
-        }
-
-        // admin
-        if ($request->user_type == 3) {
-
-        }
-
         $request->validate([
             'email' => 'required|string|email',
             'password' => 'required|string',
@@ -48,6 +33,8 @@ class AuthController extends Controller
 
         $user = Auth::user();
         return response()->json([
+            'status' => 'success',
+            'message' => 'Login successful',
             'user' => $user,
             'authorization' => [
                 'token' => $token,
@@ -56,39 +43,34 @@ class AuthController extends Controller
         ]);
     }
 
-    public function create(Request $request)
+    public function register(Request $request)
     {
         $request->validate([
+            'first_name' => 'required|string|max:50',
+            'last_name' => 'required|string|max:50',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:6',
         ]);
 
         $user = User::create([
-            'name' => '',
+            'name' => $request->first_name . ' ' . $request->last_name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
 
-        return response()->json([
-            'status' => 201,
-            'message' => 'User created successfully',
-            'data' => $user
-        ]);
-    }
-
-    public function register(Request $request)
-    {
         // tourist
-        if ($request->user_type == 1) {
-            $new_tourist = Tourist::create($request->data);
-            if ($new_tourist) {
-                return response()->json([
-                    'status' => 200,
-                    'message' => 'Tourist registered successfully.',
-                    'data' => $new_tourist
-                ], 200);
-            }
-            return response()->isServerError();
+        if ($user->id && $request->user_type == 1) {
+
+            $request['user_id'] = $user->id;
+
+            $tourist = Tourist::create($request->except(['email', 'password', 'user_type']));
+
+            return response()->json([
+                'status' => "success",
+                'message' => 'User successfully registered.',
+                //'data' => ['user' => $user, 'tourist' => $tourist]
+            ], 200);
+
         }
 
         // establishment
