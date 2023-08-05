@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Models\Establishment;
 use App\Models\Tourist;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -45,38 +46,27 @@ class AuthController extends Controller
 
     public function register(Request $request)
     {
-        $request->validate([
-            'first_name' => 'required|string|max:50',
-            'last_name' => 'required|string|max:50',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:6',
-        ]);
-
         $user = User::create([
-            'name' => $request->first_name . ' ' . $request->last_name,
+            'name' => ($request->user_type == 1) ? ($request->first_name . ' ' . $request->last_name) : $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
 
+        $request['user_id'] = $user->id;
+
         // tourist
-        if ($user->id && $request->user_type == 1) {
-
-            $request['user_id'] = $user->id;
-
-            $tourist = Tourist::create($request->except(['email', 'password', 'user_type']));
-
-            return response()->json([
-                'status' => "success",
-                'message' => 'User successfully registered.',
-                //'data' => ['user' => $user, 'tourist' => $tourist]
-            ], 200);
-
+        if ($user->id) {
+            if ($request->user_type == 1) {
+                Tourist::create($request->except(['email', 'password', 'user_type']));
+            } else {
+                Establishment::create($request->except(['email', 'password', 'user_type']));
+            }
         }
 
-        // establishment
-        if ($request->user_type == 2) {
-
-        }
+        return response()->json([
+            'status' => "success",
+            'message' => 'User successfully registered.',
+        ], 201);
     }
 
     public function logout()

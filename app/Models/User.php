@@ -11,6 +11,7 @@ use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use App\Models\Tourist;
+use App\Models\Establishment;
 
 class User extends Authenticatable implements JWTSubject
 {
@@ -70,5 +71,10 @@ class User extends Authenticatable implements JWTSubject
     public function tourist()
     {
         return $this->hasOne(Tourist::class);
+    }
+
+    public function establishment()
+    {
+        return $this->hasOne(Establishment::class);
     }
 }

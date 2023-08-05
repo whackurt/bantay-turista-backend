@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\TouristController;
+use App\Models\Establishment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use SebastianBergmann\Comparator\Factory;
@@ -50,6 +51,14 @@ Route::get('/tourist/{id}', function ($id) {
     $tourist = Tourist::find($id);
     if ($tourist) {
         return view('tourists.tourist', ['tourist' => $tourist]);
+    }
+    abort(404);
+});
+
+Route::get('/establishment/{id}', function ($id) {
+    $est = Establishment::find($id);
+    if ($est) {
+        return view('establishment.index', ['est' => $est]);
     }
     abort(404);
 });
