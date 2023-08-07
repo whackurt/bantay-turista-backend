@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Models\Admin;
 use App\Models\Establishment;
 use App\Models\Tourist;
 use App\Models\User;
@@ -47,19 +48,29 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $user = User::create([
-            'name' => ($request->user_type == 1) ? ($request->first_name . ' ' . $request->last_name) : $request->name,
+            'name' => ($request->user_type == 1 || $request->user_type == 3) ? ($request->first_name . ' ' . $request->last_name) : $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
 
         $request['user_id'] = $user->id;
 
-        // tourist
         if ($user->id) {
+
+            $creds = $request->except(['email', 'password', 'user_type']);
+
             if ($request->user_type == 1) {
-                Tourist::create($request->except(['email', 'password', 'user_type']));
-            } else {
-                Establishment::create($request->except(['email', 'password', 'user_type']));
+
+                Tourist::create($creds);
+
+            } else if ($request->user_type == 2) {
+
+                Establishment::create($creds);
+
+            } else if ($request->user_type == 3) {
+
+                Admin::create($creds);
+
             }
         }
 

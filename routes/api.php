@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\TouristController;
+use App\Models\Admin;
 use App\Models\Establishment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -57,10 +58,17 @@ Route::get('/tourist/{id}', function ($id) {
 
 Route::get('/establishment/{id}', function ($id) {
     $est = Establishment::find($id);
-    if ($est) {
-        return view('establishment.index', ['est' => $est]);
-    }
-    abort(404);
+    return view('establishment.index', ['est' => $est]);
+});
+
+Route::get('/admin', function () {
+    $admins = Admin::all();
+    return view('admin.index', ['admins' => $admins]);
+});
+
+Route::get('/admin/{id}', function ($id) {
+    $admin = Admin::find($id);
+    return view('admin.admin', ['admin' => $admin]);
 });
 
 // generate fake users
