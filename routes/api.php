@@ -1,17 +1,16 @@
 <?php
 
 use App\Http\Controllers\API\AuthController;
+use App\Http\Controllers\LogController;
 use App\Http\Controllers\TouristController;
 use App\Models\Admin;
 use App\Models\EssentialServiceProvider;
 use App\Models\Establishment;
 use App\Models\TouristSpot;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use SebastianBergmann\Comparator\Factory;
 use App\Models\User;
 use App\Models\Tourist;
+use App\Models\Log;
 
 /*
 |--------------------------------------------------------------------------
@@ -95,6 +94,13 @@ Route::get('/v1/essential_service_provider/{id}', function ($id) {
     $provider = EssentialServiceProvider::find($id);
     return $provider;
 });
+
+Route::get('/v1/logs', function () {
+    $log = Log::all();
+    return view('log.index', ['log' => $log]);
+});
+
+Route::post('/v1/log', [LogController::class, 'create']);
 
 // generate fake users
 Route::get('/v1/generateUsers/{count}', function ($count) {

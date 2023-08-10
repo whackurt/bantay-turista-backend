@@ -29,4 +29,9 @@ class Establishment extends Model
     {
         return $this->belongsTo(EstablishmentType::class);
     }
+
+    public function logs()
+    {
+        return $this->hasMany(Log::class);
+    }
 }
