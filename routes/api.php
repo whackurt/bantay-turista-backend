@@ -3,7 +3,9 @@
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\TouristController;
 use App\Models\Admin;
+use App\Models\EssentialServiceProvider;
 use App\Models\Establishment;
+use App\Models\TouristSpot;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -72,6 +74,26 @@ Route::get('/v1/admin', function () {
 Route::get('/v1/admin/{id}', function ($id) {
     $admin = Admin::find($id);
     return view('admin.admin', ['admin' => $admin]);
+});
+
+Route::get('/v1/tourist_spot', function () {
+    $spots = TouristSpot::all();
+    return $spots;
+});
+
+Route::get('/v1/tourist_spot/{id}', function ($id) {
+    $spot = TouristSpot::find($id);
+    return $spot;
+});
+
+Route::get('/v1/essential_service_provider', function () {
+    $providers = EssentialServiceProvider::all();
+    return $providers;
+});
+
+Route::get('/v1/essential_service_provider/{id}', function ($id) {
+    $provider = EssentialServiceProvider::find($id);
+    return $provider;
 });
 
 // generate fake users
