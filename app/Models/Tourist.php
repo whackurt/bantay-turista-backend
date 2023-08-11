@@ -36,4 +36,9 @@ class Tourist extends Model
     {
         return $this->hasMany(Log::class);
     }
+
+    public function complaints()
+    {
+        return $this->hasMany(Complaint::class);
+    }
 }

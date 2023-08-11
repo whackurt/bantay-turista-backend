@@ -1,9 +1,11 @@
 <?php
 
 use App\Http\Controllers\API\AuthController;
+use App\Http\Controllers\ComplaintController;
 use App\Http\Controllers\LogController;
 use App\Http\Controllers\TouristController;
 use App\Models\Admin;
+use App\Models\Complaint;
 use App\Models\EssentialServiceProvider;
 use App\Models\Establishment;
 use App\Models\TouristSpot;
@@ -96,11 +98,19 @@ Route::get('/v1/essential_service_provider/{id}', function ($id) {
 });
 
 Route::get('/v1/logs', function () {
-    $log = Log::all();
-    return view('log.index', ['log' => $log]);
+    $logs = Log::all();
+    //return response()->json(['logs' => $logs]);
+    return view('log.index', ['logs' => $logs]);
 });
 
 Route::post('/v1/log', [LogController::class, 'create']);
+
+Route::post('/v1/complaint', [ComplaintController::class, 'create']);
+
+Route::get('/v1/complaint', function () {
+    $complaints = Complaint::all();
+    return view('complaint.index', ['complaints' => $complaints]);
+});
 
 // generate fake users
 Route::get('/v1/generateUsers/{count}', function ($count) {
