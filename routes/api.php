@@ -1,9 +1,8 @@
 <?php
 
-use App\Http\Controllers\API\AuthController;
+use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\ComplaintController;
 use App\Http\Controllers\LogController;
-use App\Http\Controllers\TouristController;
 use App\Models\Admin;
 use App\Models\Complaint;
 use App\Models\EssentialServiceProvider;
@@ -105,9 +104,9 @@ Route::get('/v1/logs', function () {
 
 Route::post('/v1/log', [LogController::class, 'create']);
 
-Route::post('/v1/complaint', [ComplaintController::class, 'create']);
+Route::post('/v1/complaints', [ComplaintController::class, 'create']);
 
-Route::get('/v1/complaint', function () {
+Route::get('/v1/complaints', function () {
     $complaints = Complaint::all();
     return view('complaint.index', ['complaints' => $complaints]);
 });
