@@ -24,47 +24,60 @@ use App\Models\Log;
 |
 */
 
-/*
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
-*/
-
-Route::controller(AuthController::class)->prefix('auth')->group(function () {
-    Route::post('/login', 'login');
-    Route::post('/register', 'register');
-    Route::post('/logout', 'logout');
-    Route::post('/refresh', 'refresh');
-});
-
-
 /* 
     These routes are for testing only. 
     Don't take it seriously. 
 */
 
-Route::get('/v1/users', function () {
-    $users = User::all();
-    return $users;
-})->middleware('auth:sanctum');
-
-Route::get('/v1/tourists', function () {
-    $tourists = Tourist::all();
-    return view('tourists.index', ['tourists' => $tourists]);
+Route::controller(AuthController::class)->prefix('auth')->group(function () {
+    Route::post('/login', 'loginUser');
+    Route::post('/register', 'createUser');
+    Route::post('/logout', 'logout');
+    Route::post('/refresh', 'refresh');
 });
 
-Route::get('/v1/tourist/{id}', function ($id) {
-    $tourist = Tourist::find($id);
-    if ($tourist) {
-        return view('tourists.tourist', ['tourist' => $tourist]);
-    }
-    abort(404);
+Route::middleware('auth:sanctum')->group(function () {
+
+    Route::get('/v1/users', function () {
+        $users = User::all();
+        return $users;
+    });
+
+    Route::get('/v1/tourists', function () {
+        $tourists = Tourist::all();
+        return view('tourists.index', ['tourists' => $tourists]);
+    });
+
+    Route::get('/v1/tourists/{id}', function ($id) {
+        $tourist = Tourist::find($id);
+        return $tourist;
+        /** 
+        if ($tourist) {
+            return view('tourists.tourist', ['tourist' => $tourist]);
+        }*/
+    });
+
+    Route::get('/v1/tourist_spots', function () {
+        $spots = TouristSpot::all();
+        return $spots;
+    });
+
+    Route::get('/v1/tourist_spots/{id}', function ($id) {
+        $spot = TouristSpot::find($id);
+        return $spot;
+    });
+
+    Route::get('/v1/establishments', function () {
+        $est = Establishment::all();
+        return $est;
+    });
+
+    Route::get('/v1/establishments/{id}', function ($id) {
+        $est = Establishment::find($id);
+        return view('establishment.index', ['est' => $est]);
+    });
 });
 
-Route::get('/v1/establishment/{id}', function ($id) {
-    $est = Establishment::find($id);
-    return view('establishment.index', ['est' => $est]);
-});
 
 Route::get('/v1/admin', function () {
     $admins = Admin::all();
@@ -74,16 +87,6 @@ Route::get('/v1/admin', function () {
 Route::get('/v1/admin/{id}', function ($id) {
     $admin = Admin::find($id);
     return view('admin.admin', ['admin' => $admin]);
-});
-
-Route::get('/v1/tourist_spot', function () {
-    $spots = TouristSpot::all();
-    return $spots;
-});
-
-Route::get('/v1/tourist_spot/{id}', function ($id) {
-    $spot = TouristSpot::find($id);
-    return $spot;
 });
 
 Route::get('/v1/essential_service_provider', function () {
