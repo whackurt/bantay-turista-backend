@@ -8,10 +8,11 @@ use App\Models\Complaint;
 use App\Models\EssentialServiceProvider;
 use App\Models\Establishment;
 use App\Models\TouristSpot;
-use Illuminate\Support\Facades\Route;
 use App\Models\User;
 use App\Models\Tourist;
 use App\Models\Log;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
 
 /*
 |--------------------------------------------------------------------------
@@ -48,13 +49,20 @@ Route::middleware('auth:sanctum')->group(function () {
         return view('tourists.index', ['tourists' => $tourists]);
     });
 
-    Route::get('/v1/tourists/{id}', function ($id) {
+    Route::get('/v1/tourists/{id}/home', function ($id) {
+        $tourist = Tourist::select(DB::raw('CONCAT(first_name, " ", last_name) as full_name'), 'address', 'qr_code')->find($id);
+        if(!$tourist){
+            return response()->json(['message' => 'Tourist ID does not exist.'], 404);
+        }
+        return response()->json(['data' => $tourist], 200);
+    });
+
+    Route::get('/v1/tourists/{id}/profile', function ($id) {
         $tourist = Tourist::find($id);
-        return $tourist;
-        /** 
-        if ($tourist) {
-            return view('tourists.tourist', ['tourist' => $tourist]);
-        }*/
+        if(!$tourist){
+            return response()->json(['message' => 'Tourist ID does not exist.'], 404);
+        }
+        return response()->json(['data' => $tourist], 200);
     });
 
     Route::get('/v1/tourist_spots', function () {
