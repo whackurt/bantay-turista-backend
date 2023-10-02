@@ -15,6 +15,7 @@ class Tourist extends Model
      * @var array<int, string>
      */
     protected $fillable = [
+        'id',
         'qr_code',
         'first_name',
         'last_name',
