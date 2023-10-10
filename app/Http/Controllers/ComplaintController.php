@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 
 class ComplaintController extends Controller
 {
-    public function create(Request $request)
+    public function createComplaint(Request $request)
     {
         $details = $request->only([
             'tourist_id',

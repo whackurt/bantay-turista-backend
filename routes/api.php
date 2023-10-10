@@ -1,6 +1,9 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\TouristController;
+use App\Http\Controllers\EstablishmentController;
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ComplaintController;
 use App\Http\Controllers\LogController;
 use App\Models\Admin;
@@ -37,32 +40,38 @@ Route::controller(AuthController::class)->prefix('auth')->group(function () {
     Route::post('/refresh', 'refresh');
 });
 
+Route::controller(TouristController::class)->prefix('v1/tourist')->group(function () {
+    Route::get('/list', 'allTourist');
+    Route::get('/{id}', 'singleTourist');
+    Route::get('/{id}/home', 'touristHome');
+    Route::get('/{id}/profile', 'touristProfile');
+    Route::put('/{id}/profile/update', 'updateTourist');
+});
+
+Route::controller(EstablishmentController::class)->prefix('v1/establishment')->group(function () {
+    Route::get('/list', 'allEstablishment');
+    Route::get('/{id}', 'singleEstablishment');
+});
+
+Route::controller(AdminController::class)->prefix('v1/admin')->group(function () {
+    Route::get('/list', 'allAdmin');
+    Route::get('/{id}', 'singleAdmin');
+});
+
+Route::controller(LogController::class)->prefix('v1/logs')->group(function () {
+    Route::get('/list', 'allLogs');
+    Route::post('/create', 'createLog');
+});
+
+Route::controller(ComplaintController::class)->prefix('v1/complaints')->group(function () {
+    Route::get('/list', 'allComplaints');
+});
+
 Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/v1/users', function () {
         $users = User::all();
         return $users;
-    });
-
-    Route::get('/v1/tourists', function () {
-        $tourists = Tourist::all();
-        return view('tourists.index', ['tourists' => $tourists]);
-    });
-
-    Route::get('/v1/tourists/{id}/home', function ($id) {
-        $tourist = Tourist::select(DB::raw('CONCAT(first_name, " ", last_name) as full_name'), 'address', 'qr_code')->find($id);
-        if(!$tourist){
-            return response()->json(['message' => 'Tourist ID does not exist.'], 404);
-        }
-        return response()->json(['data' => $tourist], 200);
-    });
-
-    Route::get('/v1/tourists/{id}/profile', function ($id) {
-        $tourist = Tourist::find($id);
-        if(!$tourist){
-            return response()->json(['message' => 'Tourist ID does not exist.'], 404);
-        }
-        return response()->json(['data' => $tourist], 200);
     });
 
     Route::get('/v1/tourist_spots', function () {
@@ -74,27 +83,6 @@ Route::middleware('auth:sanctum')->group(function () {
         $spot = TouristSpot::find($id);
         return $spot;
     });
-
-    Route::get('/v1/establishments', function () {
-        $est = Establishment::all();
-        return $est;
-    });
-
-    Route::get('/v1/establishments/{id}', function ($id) {
-        $est = Establishment::find($id);
-        return view('establishment.index', ['est' => $est]);
-    });
-});
-
-
-Route::get('/v1/admin', function () {
-    $admins = Admin::all();
-    return view('admin.index', ['admins' => $admins]);
-});
-
-Route::get('/v1/admin/{id}', function ($id) {
-    $admin = Admin::find($id);
-    return view('admin.admin', ['admin' => $admin]);
 });
 
 Route::get('/v1/essential_service_provider', function () {
@@ -105,21 +93,6 @@ Route::get('/v1/essential_service_provider', function () {
 Route::get('/v1/essential_service_provider/{id}', function ($id) {
     $provider = EssentialServiceProvider::find($id);
     return $provider;
-});
-
-Route::get('/v1/logs', function () {
-    $logs = Log::all();
-    //return response()->json(['logs' => $logs]);
-    return view('log.index', ['logs' => $logs]);
-});
-
-Route::post('/v1/log', [LogController::class, 'create']);
-
-Route::post('/v1/complaints', [ComplaintController::class, 'create']);
-
-Route::get('/v1/complaints', function () {
-    $complaints = Complaint::all();
-    return view('complaint.index', ['complaints' => $complaints]);
 });
 
 // generate fake users
