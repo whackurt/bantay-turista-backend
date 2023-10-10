@@ -8,6 +8,11 @@ use Illuminate\Http\Request;
 
 class ComplaintController extends Controller
 {
+    public function allComplaints(){
+        $complaints = Complaint::all();
+        return view('complaint.index', ['complaints' => $complaints]);
+    }
+
     public function createComplaint(Request $request)
     {
         $details = $request->only([

@@ -65,6 +65,7 @@ Route::controller(LogController::class)->prefix('v1/logs')->group(function () {
 
 Route::controller(ComplaintController::class)->prefix('v1/complaints')->group(function () {
     Route::get('/list', 'allComplaints');
+    Route::get('/create', 'createComplaints');
 });
 
 Route::middleware('auth:sanctum')->group(function () {
