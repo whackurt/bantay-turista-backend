@@ -24,7 +24,8 @@ class TouristController extends Controller
     }
 
     public function touristProfile($id){
-        $tourist = Tourist::find($id);
+        $tourist = Tourist::select('first_name', 'last_name', 'date_of_birth', 'address', 'gender',
+            'nationality', 'photo_url', 'contact_number')->find($id);
         if(!$tourist){
             return response()->json(['message' => 'Tourist ID does not exist.'], 404);
         }
@@ -35,7 +36,7 @@ class TouristController extends Controller
         $validate = $request->validate([
             'first_name' => 'sometimes|string',
             'last_name' => 'sometimes|string',
-            'date of birth' => 'sometimes',
+            'date_of_birth' => 'sometimes',
             'address' => 'sometimes|string',
             'gender' => 'sometimes|string',
             'nationality' => 'sometimes',

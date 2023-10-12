@@ -52,6 +52,7 @@ Route::controller(EstablishmentController::class)->prefix('v1/establishment')->g
     Route::get('/list', 'allEstablishment');
     Route::get('/{id}', 'singleEstablishment');
     Route::get('/{id}/home', 'establishmentHome');
+    Route::get('/{id}/profile', 'establishmentProfile');
 });
 
 Route::controller(AdminController::class)->prefix('v1/admin')->group(function () {
