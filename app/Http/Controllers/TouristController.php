@@ -41,7 +41,7 @@ class TouristController extends Controller
             'gender' => 'sometimes|string',
             'nationality' => 'sometimes',
             'photo_url' => 'sometimes',
-            'contact_number' => 'sometimes|integer',
+            'contact_number' => 'sometimes',
         ]);
     
         $name = $request->input('first_name') . ' ' . $request->input('last_name');
