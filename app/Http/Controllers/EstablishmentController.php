@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Establishment;
 use App\Models\Tourist;
 use App\Models\Log;
+use App\Models\User;
 use DB;
 
 class EstablishmentController extends Controller
@@ -63,7 +64,7 @@ class EstablishmentController extends Controller
         }
     }
 
-    public function updateEst(Request $request, $id){
+    public function updateEstablishment(Request $request, $id){
         try {
             $validate = $request->validate([
                 'name' => 'sometimes|string',
@@ -74,20 +75,18 @@ class EstablishmentController extends Controller
                 'owner_phone' => 'sometimes|integer',
                 'photo_url' => 'sometimes',
             ]);    
-    
-            $name = $request->input('name');
 
             $est = Establishment::find($id);
             $est->update($validate);
             $user = User::find($est->user_id);
-            $user->name = $name;
+            $user->name = $request->input('name');;
             $user->save();
     
     
             return response()->json(['data' => $est], 200);
         }
         catch (\Throwable $th) {
-            return respone()->json([
+            return response()->json([
                 'status' => false,
                 'message' => $th->getMessage()
             ], 500);

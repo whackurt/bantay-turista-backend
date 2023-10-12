@@ -53,7 +53,7 @@ Route::controller(EstablishmentController::class)->prefix('v1/establishment')->g
     Route::get('/{id}', 'singleEstablishment');
     Route::get('/{id}/home', 'establishmentHome');
     Route::get('/{id}/profile', 'establishmentProfile');
-    Route::put('/{id}/profile/update', 'updateEst');
+    Route::put('/{id}/profile/update', 'updateEstablishment');
 });
 
 Route::controller(AdminController::class)->prefix('v1/admin')->group(function () {
