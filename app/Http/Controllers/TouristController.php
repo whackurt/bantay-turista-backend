@@ -35,7 +35,7 @@ class TouristController extends Controller
         $validate = $request->validate([
             'first_name' => 'sometimes|string',
             'last_name' => 'sometimes|string',
-            'date of birth' => 'sometimes',
+            'date_of_birth' => 'sometimes',
             'address' => 'sometimes|string',
             'gender' => 'sometimes|string',
             'nationality' => 'sometimes',
