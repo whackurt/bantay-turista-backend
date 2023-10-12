@@ -62,4 +62,35 @@ class EstablishmentController extends Controller
             ], 500);
         }
     }
+
+    public function updateEst(Request $request, $id){
+        try {
+            $validate = $request->validate([
+                'name' => 'sometimes|string',
+                'address' => 'sometimes|string',
+                'contact_number' => 'sometimes|integer',
+                'owner_name' => 'sometimes|string',
+                'owner_email' => 'sometimes|email',
+                'owner_phone' => 'sometimes|integer',
+                'photo_url' => 'sometimes',
+            ]);    
+    
+            $name = $request->input('name');
+
+            $est = Establishment::find($id);
+            $est->update($validate);
+            $user = User::find($est->user_id);
+            $user->name = $name;
+            $user->save();
+    
+    
+            return response()->json(['data' => $est], 200);
+        }
+        catch (\Throwable $th) {
+            return respone()->json([
+                'status' => false,
+                'message' => $th->getMessage()
+            ], 500);
+        }
+    }
 }
