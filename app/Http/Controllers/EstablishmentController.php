@@ -35,10 +35,6 @@ class EstablishmentController extends Controller
             }
               
             return view('establishment.home')->with('est', $est)->with('tourists', $tourists)->with('timestamps', $timestamps);
-                // ->with('est', $est);
-                // ->with('tourists', $tourists)
-                // ->with('timestamps', $timestamps);
-            // return response()->json(['est' => $est, 'tourists' => $tourists, 'timestamps' => $timestamps], 200);
         }
         catch (\Throwable $th) {
             return response()->json([
