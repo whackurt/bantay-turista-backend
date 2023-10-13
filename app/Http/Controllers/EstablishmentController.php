@@ -12,6 +12,27 @@ use DB;
 
 class EstablishmentController extends Controller
 {
+    private function getEntryLogs($id){
+        $logs = Log::all()->where('establishment_id', $id);
+        $timestamps = $logs->pluck('created_at');
+        $touristID = $logs->pluck('tourist_id');
+        $tourists = [];
+        $date = [];
+        $time = [];
+        $count = 0;
+
+        foreach ($touristID as $i){
+            $idToName = Tourist::where('id', $i)->select(DB::raw('CONCAT(first_name, " ", last_name) as full_name'))->pluck('full_name');
+            $currentTimeStamp = explode(' ', $timestamps[$count]);
+            $date[] = $currentTimeStamp[0];
+            $time[] = $currentTimeStamp[1];
+            $tourists = array_merge($tourists, $idToName->toArray());
+            $count++;
+        }
+
+        return array($tourists, $date, $time);
+    }
+
     public function allEstablishment(){
         $est = Establishment::all();
         return $est;
@@ -29,23 +50,8 @@ class EstablishmentController extends Controller
             if(!$est){
                 return response()->json(['message' => 'Establishment ID does not exist.'], 404);
             }
-            
-            $logs = Log::all()->where('establishment_id', $id);
-            $timestamps = $logs->pluck('created_at');
-            $touristID = $logs->pluck('tourist_id');
-            $tourists = [];
-            $date = [];
-            $time = [];
-            $count = 0;
 
-            foreach ($touristID as $i){
-                $idToName = Tourist::where('id', $i)->select(DB::raw('CONCAT(first_name, " ", last_name) as full_name'))->pluck('full_name');
-                $currentTimeStamp = explode(' ', $timestamps[$count]);
-                $date[] = $currentTimeStamp[0];
-                $time[] = $currentTimeStamp[1];
-                $tourists = array_merge($tourists, $idToName->toArray());
-                $count++;
-            }
+            list($tourists, $date, $time) = $this->getEntryLogs($id);
               
             return view('establishment.home')->with('est', $est)->with('tourists', $tourists)->with('date', $date)->with('time', $time);
         }
@@ -101,6 +107,7 @@ class EstablishmentController extends Controller
             ], 500);
         }
     }
+
     public function submitEntryLogs(Request $request, $id){
         try {
             $validate = $request->input(['qr_code']); 
