@@ -17,10 +17,12 @@ class TouristController extends Controller
 
     public function touristHome($id){
         $tourist = Tourist::select(DB::raw('CONCAT(first_name, " ", last_name) as full_name'), 'address', 'qr_code')->find($id);
+        
         if(!$tourist){
             return response()->json(['message' => 'Tourist ID does not exist.'], 404);
         }
-        return response()->json(['data' => $tourist], 200);
+
+        return view('tourists.home')->with('tourist', $tourist);
     }
 
     public function touristProfile($id){
@@ -45,8 +47,6 @@ class TouristController extends Controller
         ]);
     
         $name = $request->input('first_name') . ' ' . $request->input('last_name');
-
-
         $tourist = Tourist::find($id);
         $tourist->update($validate);
         $user = User::find($tourist->user_id);

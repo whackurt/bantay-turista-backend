@@ -54,6 +54,7 @@ Route::controller(EstablishmentController::class)->prefix('v1/establishment')->g
     Route::get('/{id}/home', 'establishmentHome');
     Route::get('/{id}/profile', 'establishmentProfile');
     Route::put('/{id}/profile/update', 'updateEstablishment');
+    Route::post('/{id}/scan', 'submitEntryLogs');
 });
 
 Route::controller(AdminController::class)->prefix('v1/admin')->group(function () {
@@ -86,17 +87,17 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/v1/tourist_spots/{id}', function ($id) {
         $spot = TouristSpot::find($id);
         return $spot;
+
+    Route::get('/v1/essential_service_provider', function () {
+        $providers = EssentialServiceProvider::all();
+        return $providers;
     });
-});
-
-Route::get('/v1/essential_service_provider', function () {
-    $providers = EssentialServiceProvider::all();
-    return $providers;
-});
-
-Route::get('/v1/essential_service_provider/{id}', function ($id) {
-    $provider = EssentialServiceProvider::find($id);
-    return $provider;
+    
+    Route::get('/v1/essential_service_provider/{id}', function ($id) {
+        $provider = EssentialServiceProvider::find($id);
+        return $provider;
+    });
+    });
 });
 
 // generate fake users

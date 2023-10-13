@@ -24,6 +24,6 @@ class LogController extends Controller
             'status' => 'success',
             'message' => 'Log created',
             'log' => $log
-        ], 201);
+        ], 200);
     }
 }

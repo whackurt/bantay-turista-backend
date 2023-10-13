@@ -25,20 +25,29 @@ class EstablishmentController extends Controller
     public function establishmentHome($id){
         try {
             $est = Establishment::select('name', 'address', 'photo_url')->find($id);
+
             if(!$est){
                 return response()->json(['message' => 'Establishment ID does not exist.'], 404);
             }
+            
             $logs = Log::all()->where('establishment_id', $id);
             $timestamps = $logs->pluck('created_at');
             $touristID = $logs->pluck('tourist_id');
             $tourists = [];
+            $date = [];
+            $time = [];
+            $count = 0;
 
             foreach ($touristID as $i){
                 $idToName = Tourist::where('id', $i)->select(DB::raw('CONCAT(first_name, " ", last_name) as full_name'))->pluck('full_name');
+                $currentTimeStamp = explode(' ', $timestamps[$count]);
+                $date[] = $currentTimeStamp[0];
+                $time[] = $currentTimeStamp[1];
                 $tourists = array_merge($tourists, $idToName->toArray());
+                $count++;
             }
               
-            return view('establishment.home')->with('est', $est)->with('tourists', $tourists)->with('timestamps', $timestamps);
+            return view('establishment.home')->with('est', $est)->with('tourists', $tourists)->with('date', $date)->with('time', $time);
         }
         catch (\Throwable $th) {
             return response()->json([
@@ -84,6 +93,25 @@ class EstablishmentController extends Controller
     
     
             return response()->json(['data' => $est], 200);
+        }
+        catch (\Throwable $th) {
+            return response()->json([
+                'status' => false,
+                'message' => $th->getMessage()
+            ], 500);
+        }
+    }
+    public function submitEntryLogs(Request $request, $id){
+        try {
+            $validate = $request->input(['qr_code']); 
+            $tourist = Tourist::where('qr_code', $request->qr_code)->first();
+            $log = Log::create(['tourist_id' => $tourist->id, 'establishment_id' => $id]);
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Log created',
+                'log' => $log
+            ], 200);
         }
         catch (\Throwable $th) {
             return response()->json([
