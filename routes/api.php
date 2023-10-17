@@ -51,6 +51,7 @@ Route::controller(TouristController::class)->prefix('v1/tourist')->group(functio
 Route::controller(EstablishmentController::class)->prefix('v1/establishment')->group(function () {
     Route::get('/list', 'allEstablishment');
     Route::get('/{id}', 'singleEstablishment');
+    Route::get('/{id}/logs', 'viewEntryLogs');
     Route::get('/{id}/home', 'establishmentHome');
     Route::get('/{id}/profile', 'establishmentProfile');
     Route::put('/{id}/profile/update', 'updateEstablishment');

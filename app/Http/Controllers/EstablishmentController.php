@@ -127,4 +127,17 @@ class EstablishmentController extends Controller
             ], 500);
         }
     }
+
+    public function viewEntryLogs($id){
+        try{
+            list($tourists, $date, $time) = $this->getEntryLogs($id);
+             return view('establishment.logs')->with('tourists', $tourists)->with('date', $date)->with('time', $time);
+        }
+        catch (\Throwable $th) {
+            return response()->json([
+                'status' => false,
+                'message' => $th->getMessage()
+            ], 500);
+        }
+    }
 }

@@ -24,6 +24,7 @@ class AuthController extends Controller
         while (!$check){
             $qr_code = 'BT' . $date->day . Str::random(4) . $date->minute . $date->second;
             $findQR = Tourist::where('qr_code', $qr_code)->first();
+            
             if(!$findQR){
                 $check = true;
             }
