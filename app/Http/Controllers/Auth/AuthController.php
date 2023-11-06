@@ -11,9 +11,27 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
+use Carbon\Carbon;
 
 class AuthController extends Controller
 {
+    private function generateUniqueQRCode()
+    {
+        $date = Carbon::now();
+        $check = false;
+
+        while (!$check){
+            $qr_code = 'BT' . $date->day . Str::random(4) . $date->minute . $date->second;
+            $findQR = Tourist::where('qr_code', $qr_code)->first();
+            
+            if(!$findQR){
+                $check = true;
+            }
+        }
+        
+        return $qr_code;
+    }
 
     public function createUser(Request $request)
     {
@@ -53,7 +71,8 @@ class AuthController extends Controller
                 $creds = $request->except(['email', 'password', 'user_type']);
 
                 if ($request->user_type == 1) {
-
+                    
+                    $creds['qr_code'] = $this->generateuniqueQRCode();                   
                     Tourist::create($creds);
 
                 } else if ($request->user_type == 2) {
@@ -70,7 +89,7 @@ class AuthController extends Controller
             return response()->json([
                 'status' => true,
                 'message' => 'User Created Successfully',
-                'token' => $user->createToken("API TOKEN")->plainTextToken
+                'token' => $user->createToken("API TOKEN")->plainTextToken,
             ], 200);
 
         } catch (\Throwable $th) {

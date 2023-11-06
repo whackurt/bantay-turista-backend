@@ -8,7 +8,13 @@ use App\Models\Log;
 
 class LogController extends Controller
 {
-    public function create(Request $request)
+    public function allLogs(){
+        $logs = Log::all();
+        //return response()->json(['logs' => $logs]);
+        return view('log.index', ['logs' => $logs]);
+    }
+
+    public function createLog(Request $request)
     {
         $logDetails = $request->only(['tourist_id', 'establishment_id']);
 
@@ -18,6 +24,6 @@ class LogController extends Controller
             'status' => 'success',
             'message' => 'Log created',
             'log' => $log
-        ], 201);
+        ], 200);
     }
 }

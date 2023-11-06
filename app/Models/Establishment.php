@@ -16,6 +16,7 @@ class Establishment extends Model
         'owner_name',
         'owner_email',
         'owner_phone',
+        'photo_url',
         'type_id',
         'user_id',
     ];
