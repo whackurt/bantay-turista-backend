@@ -61,6 +61,8 @@ Route::controller(EstablishmentController::class)->prefix('v1/establishment')->g
 Route::controller(AdminController::class)->prefix('v1/admin')->group(function () {
     Route::get('/list', 'allAdmin');
     Route::get('/{id}', 'singleAdmin');
+    Route::get('/logs/list', 'viewLogs');
+    Route::get('/logs/list/{id}', 'viewFilterLogs');
 });
 
 Route::controller(LogController::class)->prefix('v1/logs')->group(function () {
