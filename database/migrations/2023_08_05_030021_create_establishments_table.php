@@ -18,6 +18,7 @@ return new class extends Migration {
             $table->string('owner_name');
             $table->string('owner_email');
             $table->string('owner_phone');
+            $table->string('photo_url');
             $table->integer('type_id');
             $table->foreign('type_id')->references('id')->on('establishment_types');
             $table->integer('user_id');
