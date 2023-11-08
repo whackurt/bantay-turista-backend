@@ -63,6 +63,7 @@ Route::controller(AdminController::class)->prefix('v1/admin')->group(function ()
     Route::get('/{id}', 'singleAdmin');
     Route::get('/logs/list', 'viewLogs');
     Route::get('/logs/list/{id}', 'viewFilterLogs');
+    Route::post('/tourist_spots/create', 'createTouristSpot');
 });
 
 Route::controller(LogController::class)->prefix('v1/logs')->group(function () {
