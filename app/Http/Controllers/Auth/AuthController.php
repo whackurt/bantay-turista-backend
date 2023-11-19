@@ -66,6 +66,8 @@ class AuthController extends Controller
 
             $request['user_id'] = $user->id;
 
+            $id_data = ["user_id" => $user->id ];
+
             if ($user->id) {
 
                 $creds = $request->except(['email', 'password', 'user_type']);
@@ -73,11 +75,13 @@ class AuthController extends Controller
                 if ($request->user_type == 1) {
                     
                     $creds['qr_code'] = $this->generateuniqueQRCode();                   
-                    Tourist::create($creds);
+                    $newTourist = Tourist::create($creds);
+                    $id_data['tourist_id'] = $newTourist->id;
 
                 } else if ($request->user_type == 2) {
 
-                    Establishment::create($creds);
+                    $newEstablishment =  Establishment::create($creds);
+                    $id_data['establishment_id'] = $newEstablishment->id;
 
                 } else if ($request->user_type == 3) {
 
@@ -88,9 +92,10 @@ class AuthController extends Controller
 
             return response()->json([
                 'status' => true,
+                'id' => $id_data,
                 'message' => 'User Created Successfully',
-                'token' => $user->createToken("API TOKEN")->plainTextToken,
-            ], 200);
+                // 'token' => $user->createToken("API TOKEN")->plainTextToken,
+            ], 201);
 
         } catch (\Throwable $th) {
             return response()->json([
