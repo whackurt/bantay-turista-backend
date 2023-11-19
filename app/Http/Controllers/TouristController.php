@@ -36,19 +36,25 @@ class TouristController extends Controller
 
     public function updateTourist(Request $request, $id){
         $validate = $request->validate([
-            'first_name' => 'sometimes|string',
-            'last_name' => 'sometimes|string',
-            'date_of_birth' => 'sometimes',
-            'address' => 'sometimes|string',
-            'gender' => 'sometimes|string',
-            'nationality' => 'sometimes',
-            'photo_url' => 'sometimes',
+            'first_name' => 'sometimes|required|string',
+            'last_name' => 'sometimes|required|string',
+            'date_of_birth' => 'sometimes|required',
+            'country' => 'sometimes|required|string',
+            'state_province' => 'sometimes|required|string',
+            'city_municipality' => 'sometimes|required|string',
+            'address_1' => 'sometimes|required|string',
+            'address_2' => 'sometimes|required|string',
+            'gender' => 'sometimes|required|string',
+            'nationality' => 'sometimes|required',
+            'photo_url' => 'sometimes|required',
             'contact_number' => 'sometimes|integer',
         ]);
     
         $name = $request->input('first_name') . ' ' . $request->input('last_name');
+        
         $tourist = Tourist::find($id);
         $tourist->update($validate);
+
         $user = User::find($tourist->user_id);
         $user->name = $name;
         $user->save();
