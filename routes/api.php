@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\EstablishmentTypeController;
 use App\Http\Controllers\TouristController;
 use App\Http\Controllers\EstablishmentController;
 use App\Http\Controllers\AdminController;
@@ -56,6 +57,10 @@ Route::controller(EstablishmentController::class)->prefix('v1/establishment')->g
     Route::get('/{id}/profile', 'establishmentProfile');
     Route::put('/{id}/profile/update', 'updateEstablishment');
     Route::post('/{id}/scan', 'submitEntryLogs');
+});
+Route::controller(EstablishmentTypeController::class)->prefix('v1/establishment-type')->group(function () {
+    Route::get('/', 'getEstablishmentTypes');
+    Route::post('/', 'createEstablishmentType');
 });
 
 Route::controller(AdminController::class)->prefix('v1/admin')->group(function () {
