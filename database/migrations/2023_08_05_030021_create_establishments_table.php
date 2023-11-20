@@ -13,7 +13,9 @@ return new class extends Migration {
         Schema::create('establishments', function (Blueprint $table) {
             $table->integer('id')->autoIncrement();
             $table->string('name');
-            $table->string('address');
+            $table->string('city_municipality');
+            $table->string('barangay');
+            $table->string('address_1');
             $table->string('contact_number');
             $table->string('owner_name');
             $table->string('owner_email');

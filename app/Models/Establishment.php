@@ -11,7 +11,9 @@ class Establishment extends Model
 
     protected $fillable = [
         'name',
-        'address',
+        'city_municipality',
+        'barangay',
+        'address_1',
         'contact_number',
         'owner_name',
         'owner_email',
