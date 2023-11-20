@@ -111,6 +111,7 @@ class AuthController extends Controller
             $validateUser = Validator::make(
                 $request->all(),
                 [
+                    'user_type'=>'required',
                     'email' => 'required|email',
                     'password' => 'required'
                 ]
@@ -132,9 +133,22 @@ class AuthController extends Controller
             }
 
             $user = User::where('email', $request->email)->first();
+            
+            $id_data = ['userId' => $user->id];
+
+            if($request->user_type == 1){
+                $tourist = Tourist::where('user_id', $user->id)->first();
+                $id_data['touristId'] = $tourist->id;
+            }
+            
+            if($request->user_type == 2){
+                $establishment = Establishment::where('user_id', $user->id)->first();
+                $id_data['establishmentId'] = $establishment->id;
+            }         
 
             return response()->json([
                 'status' => true,
+                'id' => $id_data,
                 'message' => 'User Logged In Successfully',
                 'token' => $user->createToken("API TOKEN")->plainTextToken
             ], 200);
