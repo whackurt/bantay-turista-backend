@@ -15,7 +15,7 @@ return new class extends Migration {
             $table->string('name');
             $table->string('city_municipality');
             $table->string('barangay');
-            $table->string('address_1');
+            $table->string('address_1')->nullable(true);
             $table->string('contact_number');
             $table->string('owner_name');
             $table->string('owner_email');
