@@ -45,7 +45,7 @@ class EstablishmentController extends Controller
 
     public function establishmentHome($id){
         try {
-            $est = Establishment::select('name', 'address', 'photo_url')->find($id);
+            $est = Establishment::select('name', 'city_municipality', 'barangay', 'address_1', 'photo_url')->find($id);
 
             if(!$est){
                 return response()->json(['message' => 'Establishment ID does not exist.'], 404);
@@ -53,7 +53,17 @@ class EstablishmentController extends Controller
 
             list($tourists, $date, $time) = $this->getEntryLogs($id);
               
-            return view('establishment.home')->with('est', $est)->with('tourists', $tourists)->with('date', $date)->with('time', $time);
+//            return view('establishment.home')->with('est', $est)->with('tourists', $tourists)->with('date', $date)->with('time', $time);
+            return response()->json([
+            'status'=>true, 
+            'message' => 'Establishment fetched successfully.', 
+            'data' => [
+                'establishment'=> $est,
+                'tourists'=> $tourists,
+                'date'=> $date,
+                'time'=> $time
+            ]
+        ], 200);
         }
         catch (\Throwable $th) {
             return response()->json([
