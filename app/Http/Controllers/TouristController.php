@@ -12,26 +12,46 @@ class TouristController extends Controller
 {
     public function allTourist(){
         $tourists = Tourist::all();
-        return view('tourists.index', ['tourists' => $tourists]);
+        return response()->json([
+            'status'=>true, 
+            'message' => 'Tourist fetched successfully.', 
+            'data' => $tourists
+        ], 200);
     }
 
     public function touristHome($id){
-        $tourist = Tourist::select(DB::raw('CONCAT(first_name, " ", last_name) as full_name'), 'address', 'qr_code')->find($id);
+        $tourist = Tourist::select(DB::raw('CONCAT(first_name, " ", last_name) as full_name'),'photo_url', 'country', 'city_municipality', 'state_province', 'address_1', 'address_2', 'qr_code')->find($id);
         
         if(!$tourist){
-            return response()->json(['message' => 'Tourist ID does not exist.'], 404);
+            return response()->json([
+                'status'=>false, 
+                'message' => 'Tourist ID does not exist.'
+            ], 404);
         }
 
-        return view('tourists.home')->with('tourist', $tourist);
+        return response()->json([
+            'status'=>true, 
+            'message' => 'Tourist fetched successfully.', 
+            'data' => $tourist
+        ], 200);
     }
 
+
     public function touristProfile($id){
-        $tourist = Tourist::select('first_name', 'last_name', 'date_of_birth', 'address', 'gender',
+        $tourist = Tourist::select('first_name', 'last_name', 'date_of_birth', 'country', 'city_municipality', 'state_province', 'address_1', 'address_2', 'gender',
             'nationality', 'photo_url', 'contact_number')->find($id);
         if(!$tourist){
-            return response()->json(['message' => 'Tourist ID does not exist.'], 404);
+            return response()->json([
+                'status'=>false, 
+                'message' => 'Tourist ID does not exist.'
+            ], 404);
         }
-        return response()->json(['data' => $tourist], 200);
+
+        return response()->json([
+            'status'=>true, 
+            'message' => 'Tourist fetched successfully.', 
+            'data' => $tourist
+        ], 200);
     }
 
     public function updateTourist(Request $request, $id){
@@ -53,6 +73,14 @@ class TouristController extends Controller
         $name = $request->input('first_name') . ' ' . $request->input('last_name');
         
         $tourist = Tourist::find($id);
+        
+        if(!$tourist){
+            return response()->json([
+                'status'=>false, 
+                'message' => 'Tourist ID does not exist.'
+            ], 404);
+        }
+
         $tourist->update($validate);
 
         $user = User::find($tourist->user_id);
@@ -60,6 +88,10 @@ class TouristController extends Controller
         $user->save();
 
 
-        return response()->json(['data' => $tourist], 200);
+        return response()->json([
+            'status'=>true, 
+            'message' => 'Tourist updated successfully.', 
+            'data' => $tourist
+        ], 200);
     }
 }
