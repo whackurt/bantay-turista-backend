@@ -55,24 +55,8 @@ class TouristController extends Controller
     }
 
     public function updateTourist(Request $request, $id){
-        $validate = $request->validate([
-            'first_name' => 'sometimes|required|string',
-            'last_name' => 'sometimes|required|string',
-            'date_of_birth' => 'sometimes|required',
-            'country' => 'sometimes|required|string',
-            'state_province' => 'sometimes|required|string',
-            'city_municipality' => 'sometimes|required|string',
-            'address_1' => 'sometimes|required|string',
-            'address_2' => 'sometimes|required|string',
-            'gender' => 'sometimes|required|string',
-            'nationality' => 'sometimes|required',
-            'photo_url' => 'sometimes|required',
-            'contact_number' => 'sometimes|integer',
-        ]);
-    
-        $name = $request->input('first_name') . ' ' . $request->input('last_name');
         
-        $tourist = Tourist::find($id);
+        $tourist = Tourist::findOrFail($id);
         
         if(!$tourist){
             return response()->json([
@@ -81,12 +65,23 @@ class TouristController extends Controller
             ], 404);
         }
 
-        $tourist->update($validate);
+        $validated = $request->validate([
+            'first_name' => 'sometimes|string',
+            'last_name' => 'sometimes|string',
+            'date_of_birth' => 'sometimes|string',
+            'country' => 'sometimes|string',
+            'state_province' => 'sometimes|string',
+            'city_municipality' => 'sometimes|string',
+            'address_1' => 'sometimes|string',
+            'address_2' => 'sometimes|string',
+            'gender' => 'sometimes|string',
+            'nationality' => 'sometimes|string',
+            'photo_url' => 'sometimes|string',
+            'contact_number' => 'sometimes|string',
+        ]);
 
-        $user = User::find($tourist->user_id);
-        $user->name = $name;
-        $user->save();
-
+        $tourist->fill($validated);
+        $tourist->save();
 
         return response()->json([
             'status'=>true, 
