@@ -91,24 +91,44 @@ class EstablishmentController extends Controller
 
     public function updateEstablishment(Request $request, $id){
         try {
-            $validate = $request->validate([
+
+            $est = Establishment::findOrFail($id);
+
+            if(!$est){
+            return response()->json([
+                'status'=>false, 
+                'message' => 'Establishment ID does not exist.'
+            ], 404);
+        }
+
+            $validated = $request->validate([
                 'name' => 'sometimes|string',
-                'address' => 'sometimes|string',
-                'contact_number' => 'sometimes|integer',
+                'city_municipality' => 'sometimes|string',
+                'barangay' => 'sometimes|string',
+                'address_1' => 'sometimes|string',
+                'contact_number' => 'sometimes|string',
                 'owner_name' => 'sometimes|string',
                 'owner_email' => 'sometimes|email',
-                'owner_phone' => 'sometimes|integer',
+                'owner_phone' => 'sometimes|string',
                 'photo_url' => 'sometimes',
+                'type_id' => 'sometimes|string',
             ]);    
 
-            $est = Establishment::find($id);
+            $est->fill($validated);
+            $est->save();
+
+            /* $est = Establishment::find($id);
             $est->update($validate);
             $user = User::find($est->user_id);
             $user->name = $request->input('name');;
             $user->save();
+            */
     
-    
-            return response()->json(['data' => $est], 200);
+            return response()->json([
+            'status'=>true, 
+            'message' => 'Establishment updated successfully.', 
+            'data' => $est
+        ], 200);
         }
         catch (\Throwable $th) {
             return response()->json([

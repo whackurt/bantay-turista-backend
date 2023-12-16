@@ -39,7 +39,7 @@ class TouristController extends Controller
 
     public function touristProfile($id){
         $tourist = Tourist::select('first_name', 'last_name', 'date_of_birth', 'country', 'city_municipality', 'state_province', 'address_1', 'address_2', 'gender',
-            'nationality', 'photo_url', 'contact_number')->find($id);
+            'nationality', 'photo_url', 'contact_number', 'qr_code')->find($id);
         if(!$tourist){
             return response()->json([
                 'status'=>false, 
