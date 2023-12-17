@@ -5,8 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class TouristSpot extends Model
+class EmergencyHotlineNumber extends Model
 {
     use HasFactory;
-    protected $fillable = ['name', 'address', 'description', 'imgUrl', 'gMapUrl'];
+
+    protected $fillable = [
+        'agencyName',
+        'address',
+        'hotlineNumber',
+    ];
 }
