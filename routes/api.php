@@ -1,38 +1,20 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\EmergencyHotlineNumbersController;
+use App\Http\Controllers\EssentialServiceProviderController;
 use App\Http\Controllers\EstablishmentTypeController;
+use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\TouristController;
 use App\Http\Controllers\EstablishmentController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ComplaintController;
 use App\Http\Controllers\LogController;
-use App\Models\Admin;
-use App\Models\Complaint;
-use App\Models\EssentialServiceProvider;
-use App\Models\Establishment;
-use App\Models\TouristSpot;
+use App\Http\Controllers\TouristSpotController;
 use App\Models\User;
 use App\Models\Tourist;
-use App\Models\Log;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Http\Request;
 
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "api" middleware group. Make something great!
-|
-*/
-
-/* 
-    These routes are for testing only. 
-    Don't take it seriously. 
-*/
 
 Route::controller(AuthController::class)->prefix('auth')->group(function () {
     Route::post('/login', 'loginUser');
@@ -58,6 +40,7 @@ Route::controller(EstablishmentController::class)->prefix('v1/establishment')->g
     Route::put('/{id}/profile/update', 'updateEstablishment');
     Route::post('/{id}/scan', 'submitEntryLogs');
 });
+
 Route::controller(EstablishmentTypeController::class)->prefix('v1/establishment-type')->group(function () {
     Route::get('/', 'getEstablishmentTypes');
     Route::post('/', 'createEstablishmentType');
@@ -81,32 +64,36 @@ Route::controller(ComplaintController::class)->prefix('v1/complaints')->group(fu
     Route::get('/create', 'createComplaints');
 });
 
-Route::middleware('auth:sanctum')->group(function () {
+Route::controller(TouristSpotController::class)->prefix('v1/tourist-spot')->group(function(){
+    Route::get('/', 'getAllTouristSpots');
+    Route::get('/{id}', 'getTouristSpotById');
+    Route::post('/', 'createTouristSpot');
+    Route::put('/{id}/update', 'updateTouristSpot');
+    Route::delete('/{id}/delete', 'deleteTouristSpot');
+});
 
-    Route::get('/v1/users', function () {
-        $users = User::all();
-        return $users;
-    });
+Route::controller(EssentialServiceProviderController::class)->prefix('v1/essential-service-provider')->group(function(){
+    Route::get('/', 'getAllProviders');
+    Route::get('/{id}', 'getProviderById');
+    Route::post('/', 'createProvider');
+    Route::put('/{id}/update', 'updateProvider');
+    Route::delete('/{id}/delete', 'deleteProvider');
+});
 
-    Route::get('/v1/tourist_spots', function () {
-        $spots = TouristSpot::all();
-        return $spots;
-    });
+Route::controller(EmergencyHotlineNumbersController::class)->prefix('v1/hotline')->group(function(){
+    Route::get('/', 'getAllHotlines');
+    Route::get('/{id}', 'getHotlineById');
+    Route::post('/', 'createHotline');
+    Route::put('/{id}/update', 'updateHotline');
+    Route::delete('/{id}/delete', 'deleteHotline');
+});
 
-    Route::get('/v1/tourist_spots/{id}', function ($id) {
-        $spot = TouristSpot::find($id);
-        return $spot;
-
-    Route::get('/v1/essential_service_provider', function () {
-        $providers = EssentialServiceProvider::all();
-        return $providers;
-    });
-    
-    Route::get('/v1/essential_service_provider/{id}', function ($id) {
-        $provider = EssentialServiceProvider::find($id);
-        return $provider;
-    });
-    });
+Route::controller(ScheduleController::class)->prefix('v1/schedule')->group(function(){
+    Route::get('/', 'getAllSchedules');
+    Route::get('/{id}', 'getScheduleById');
+    Route::post('/', 'createSchedule');
+    Route::put('/{id}/update', 'updateSchedule');
+    Route::delete('/{id}/delete', 'deleteSchedule');
 });
 
 // generate fake users
