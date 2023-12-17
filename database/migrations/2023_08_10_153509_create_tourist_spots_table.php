@@ -15,7 +15,8 @@ return new class extends Migration {
             $table->string('name');
             $table->string('address');
             $table->string('description');
-            $table->string('imageUrl');
+            $table->string('imgUrl');
+            $table->string('gMapUrl');
             $table->timestamps();
         });
     }

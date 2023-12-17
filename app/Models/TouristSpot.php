@@ -8,5 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class TouristSpot extends Model
 {
     use HasFactory;
-    protected $fillable = ['name', 'address', 'description', 'imageUrl'];
+    protected $fillable = ['name', 'address', 'description', 'imgUrl', 'gMapUrl'];
 }
