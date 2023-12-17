@@ -9,7 +9,14 @@ class Complaint extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['tourist_id', 'description', 'response', 'resolved'];
+    protected $fillable = [
+        'involved_establishment_id',
+        'date_of_incident', 
+        'description', 
+        'response', 
+        'tourist_id',  
+        'resolved'
+    ];
 
     public function tourist()
     {

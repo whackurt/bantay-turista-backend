@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\EmergencyHotlineNumbersController;
 use App\Http\Controllers\EssentialServiceProviderController;
 use App\Http\Controllers\EstablishmentTypeController;
+use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\TouristController;
 use App\Http\Controllers\EstablishmentController;
@@ -94,6 +95,21 @@ Route::controller(ScheduleController::class)->prefix('v1/schedule')->group(funct
     Route::post('/', 'createSchedule');
     Route::put('/{id}/update', 'updateSchedule');
     Route::delete('/{id}/delete', 'deleteSchedule');
+});
+
+Route::controller(ComplaintController::class)->prefix('v1/complaint')->group(function(){
+    Route::get('/', 'getAllComplaints');
+    Route::get('/{id}', 'getComplaintsByTouristId');
+    Route::post('/create', 'createComplaint');
+    Route::put('/{id}/update', 'updateComplaintResponse');
+    Route::delete('/{id}/delete', 'deleteComplaint');
+});
+
+Route::controller(FeedbackController::class)->prefix('v1/feedback')->group(function(){
+    Route::get('/', 'getAllFeedback');
+    Route::get('/{id}', 'getFeedbackById');
+    Route::post('/create', 'createFeedback');
+    Route::delete('/{id}/delete', 'deleteFeedback');
 });
 
 // generate fake users
