@@ -8,26 +8,128 @@ use Illuminate\Http\Request;
 
 class ComplaintController extends Controller
 {
-    public function allComplaints(){
-        $complaints = Complaint::all();
-        return view('complaint.index', ['complaints' => $complaints]);
-    }
 
     public function createComplaint(Request $request)
     {
-        $details = $request->only([
-            'tourist_id',
-            'description',
-            'response',
-            'resolved'
-        ]);
+        try{
+            $complaint = $request->only([
+                'involved_establishment_id',
+                'date_of_incident', 
+                'description', 
+                'response', 
+                'tourist_id',  
+                'resolved'
+            ]);
 
-        $complaint = Complaint::create($details);
+            $newComplaint = Complaint::create($complaint);
 
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Complaint successfully created.',
-            'complaint' => $complaint
-        ], 201);
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Complaint created successfully.',
+                'complaint' => $newComplaint
+            ], 201);
+
+        } catch(\Throwable $th){
+            return response()->json([
+                'status' => false,
+                'message' => $th->getMessage()
+            ], 500);
+        }
+        
+    }
+
+    public function getAllComplaints() {
+        try {
+            $complaints = Complaint::all();
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Complaints fetched successfully.',
+                'complaints' => $complaints
+            ], 200);
+
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => false,
+                'message' => $th->getMessage()
+            ], 500);
+        }    
+    }
+
+    public function getComplaintsByTouristId($id){
+        try {
+            $complaints = Complaint::where('tourist_id', $id)->get();
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Complaints fetched successfully.',
+                'complaints' => $complaints
+            ], 200);
+
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => false,
+                'message' => $th->getMessage()
+            ], 500);
+        }        
+    }  
+
+    public function updateComplaintResponse(Request $request, $id){
+        try {
+            $complaint = Complaint::find($id);
+
+            if (!$complaint) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Complaint not found.'
+                ], 404);
+            }
+
+            $validatedData = $request->validate([
+                'response' => 'required|string' 
+            ]);
+
+            $complaint->response = $validatedData['response'];
+            $complaint->resolved = true;
+            $complaint->save();
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Complaint response updated successfully.',
+                'complaint' => $complaint
+            ], 200);
+
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => false,
+                'message' => $th->getMessage()
+            ], 500);
+        }
+    }
+
+    public function deleteComplaint($id){
+        try {
+            $complaint = Complaint::find($id);
+
+            if (!$complaint) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Complaint not found.'
+                ], 404);
+            }
+
+            $complaint->delete();
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Complaint deleted successfully.'
+            ], 200);
+
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => false,
+                'message' => $th->getMessage()
+            ], 500);
+        }
     }
 }

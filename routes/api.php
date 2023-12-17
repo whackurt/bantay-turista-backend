@@ -96,6 +96,14 @@ Route::controller(ScheduleController::class)->prefix('v1/schedule')->group(funct
     Route::delete('/{id}/delete', 'deleteSchedule');
 });
 
+Route::controller(ComplaintController::class)->prefix('v1/complaint')->group(function(){
+    Route::get('/', 'getAllComplaints');
+    Route::get('/{id}', 'getComplaintsByTouristId');
+    Route::post('/create', 'createComplaint');
+    Route::put('/{id}/update', 'updateComplaintResponse');
+    Route::delete('/{id}/delete', 'deleteComplaint');
+});
+
 // generate fake users
 Route::get('/v1/generateUsers/{count}', function ($count) {
     User::factory()->count($count)->create();

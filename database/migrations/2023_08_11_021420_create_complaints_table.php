@@ -12,11 +12,14 @@ return new class extends Migration {
     {
         Schema::create('complaints', function (Blueprint $table) {
             $table->id();
+            $table->integer('involved_establishment_id');
+            $table->foreign('involved_establishment_id')->references('id')->on('establishments');
+            $table->dateTimeTz('date_of_incident');
             $table->text('description');
-            $table->text('response')->nullable();
-            $table->boolean('resolved');
+            $table->text('response')->nullable();            
             $table->integer('tourist_id');
             $table->foreign('tourist_id')->references('id')->on('tourists');
+            $table->boolean('resolved');
             $table->timestamps();
         });
     }
