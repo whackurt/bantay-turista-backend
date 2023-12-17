@@ -14,6 +14,7 @@ class EmergencyHotlineNumbersController extends Controller
             $hotline = $request->only([
                 'agencyName',
                 'address',
+                'agencyLogo',
                 'hotlineNumber',
             ]);
 
@@ -85,6 +86,7 @@ class EmergencyHotlineNumbersController extends Controller
             $validated = $request->validate([
                 'agencyName' => 'sometimes|string',
                 'address' => 'sometimes|string',
+                'agencyLogo' => 'sometimes|string',
                 'hotlineNumber' => 'sometimes|string',
             ]);
 
