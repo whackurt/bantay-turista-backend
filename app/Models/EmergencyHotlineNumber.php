@@ -12,6 +12,7 @@ class EmergencyHotlineNumber extends Model
     protected $fillable = [
         'agencyName',
         'address',
+        'agencyLogo',
         'hotlineNumber',
     ];
 }

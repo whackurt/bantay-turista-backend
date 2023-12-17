@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('agencyName');
             $table->string('address');
+            $table->string('agencyLogo');
             $table->string('hotlineNumber');
             $table->timestamps();
         });
