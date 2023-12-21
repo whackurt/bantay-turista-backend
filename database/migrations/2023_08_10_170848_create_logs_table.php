@@ -12,10 +12,12 @@ return new class extends Migration {
     {
         Schema::create('logs', function (Blueprint $table) {
             $table->id();
+            $table->string('qr_code');
             $table->integer('tourist_id');
             $table->foreign('tourist_id')->references('id')->on('tourists');
             $table->integer('establishment_id');
             $table->foreign('establishment_id')->references('id')->on('establishments');
+            $table->dateTimeTz('date_time');
             $table->timestamps();
         });
     }

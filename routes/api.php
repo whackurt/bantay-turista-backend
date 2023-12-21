@@ -33,8 +33,8 @@ Route::controller(TouristController::class)->prefix('v1/tourist')->group(functio
 });
 
 Route::controller(EstablishmentController::class)->prefix('v1/establishment')->group(function () {
-    Route::get('/list', 'allEstablishment');
-    Route::get('/{id}', 'singleEstablishment');
+    Route::get('/', 'getAllEstablishments');
+    Route::get('/{id}', 'getEstablishmentById');
     Route::get('/{id}/logs', 'viewEntryLogs');
     Route::get('/{id}/home', 'establishmentHome');
     Route::get('/{id}/profile', 'establishmentProfile');
@@ -55,8 +55,9 @@ Route::controller(AdminController::class)->prefix('v1/admin')->group(function ()
     Route::post('/tourist_spots/create', 'createTouristSpot');
 });
 
-Route::controller(LogController::class)->prefix('v1/logs')->group(function () {
+Route::controller(LogController::class)->prefix('v1/log')->group(function () {
     Route::get('/list', 'allLogs');
+    Route::get('/', 'getLogsByEstablishmentIdAndDate');
     Route::post('/create', 'createLog');
 });
 

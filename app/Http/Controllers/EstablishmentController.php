@@ -33,14 +33,41 @@ class EstablishmentController extends Controller
         return array($tourists, $date, $time);
     }
 
-    public function allEstablishment(){
-        $est = Establishment::all();
-        return $est;
+    public function getEstablishmentById($id){
+        try {
+            $establishment = Establishment::findOrFail($id);
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Establishment fetched successfully.',
+                'establishment' => $establishment
+            ], 200);
+
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => false,
+                'message' => $th->getMessage()
+            ], 500);
+        }       
     }
 
-    public function singleEstablishment($id){
-        $est = Establishment::find($id);
-        return view('establishment.index', ['est' => $est]);
+    public function getAllEstablishments(){
+
+        try {
+            $establishments = Establishment::all();
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Establishments fetched successfully.',
+                'establishments' => $establishments
+            ], 200);
+
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => false,
+                'message' => $th->getMessage()
+            ], 500);
+        } 
     }
 
     public function establishmentHome($id){

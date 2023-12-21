@@ -9,7 +9,7 @@ class Log extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['tourist_id', 'establishment_id'];
+    protected $fillable = ['qr_code', 'date_time', 'tourist_id', 'establishment_id'];
 
     public function tourist()
     {
