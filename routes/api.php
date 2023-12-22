@@ -16,6 +16,13 @@ use App\Models\User;
 use App\Models\Tourist;
 use Illuminate\Support\Facades\Route;
 
+Route::get('/', function (){
+    
+    return response()->json([
+        'msg' => 'Hello Camiguin Bantay Turista!'
+    ], 200);
+
+});
 
 Route::controller(AuthController::class)->prefix('auth')->group(function () {
     Route::post('/login', 'loginUser');
